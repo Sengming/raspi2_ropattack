@@ -30,7 +30,7 @@ DEBUG	= -g -O0 -fno-stack-protector
 #DEBUG	= -O3
 CC	= gcc
 INCLUDE	= -I/usr/local/include
-CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe -static
+CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
 
 LDFLAGS	= -L/usr/local/lib
 LDLIBS    = -lwiringPi -lwiringPiDev -lpthread -lm -lcrypt -lrt
@@ -61,7 +61,10 @@ serialRead:	serialRead.o
 clean:
 	$Q echo "[Clean]"
 	$Q rm -f $(OBJ) *~ core tags $(BINS)
-	$Q rm -f log.txt secret_accessed.txt
+	$Q rm -f log.txt temp.txt
+
+fileclean:
+	$Q rm -f log.txt temp.txt
 
 tags:	$(SRC)
 	$Q echo [ctags]

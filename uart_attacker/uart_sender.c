@@ -17,6 +17,8 @@ int main(int argc, char* argv[])
 	int status, fd;
 	int loops = 0;
 	FILE *fptr1;
+	long filelength;
+	int i;
 	char filename[100], c;
 
 	if ((fd = open ("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY |
@@ -62,9 +64,14 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 
+	fseek(fptr1, 0, SEEK_END);
+	filelength = ftell(fptr1);
+	printf("Length is in bytes: %ld\n", filelength);
+
+	rewind(fptr1);
 	// Read contents from file
 	c = fgetc(fptr1);
-	while (c != EOF)
+	for (i = 1; i < filelength; ++i)
 	{
 		++loops;
 		printf("Sending Character: %d\n", (uint8_t)c);
@@ -73,6 +80,6 @@ int main(int argc, char* argv[])
 		//	sleep(1);
 		c = fgetc(fptr1);
 	}
-	printf("Number of bytes sent: %d\n", loops);
+	printf("Number of bytes sent: %d\n", loops+ 1);
 	return 0;
 }
