@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	FILE *fptr1;
 	long filelength;
 	int i;
-	char filename[100], c;
+	char c;
 
 	if ((fd = open ("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY |
 			O_NONBLOCK)) == -1)
@@ -53,10 +53,6 @@ int main(int argc, char* argv[])
 
 	usleep (10000) ;	// 10mS
 
-
-	//printf("Enter the filename to open for reading \n");
-	//scanf("%s", filename);
-	//// Open one file for reading
 	fptr1 = fopen(argv[1], "r");
 	if (fptr1 == NULL)
 	{
@@ -66,7 +62,7 @@ int main(int argc, char* argv[])
 
 	fseek(fptr1, 0, SEEK_END);
 	filelength = ftell(fptr1);
-	printf("Length is in bytes: %ld\n", filelength);
+	printf("Filelength in bytes: %ld\n", filelength);
 
 	rewind(fptr1);
 	// Read contents from file
@@ -76,8 +72,6 @@ int main(int argc, char* argv[])
 		++loops;
 		printf("Sending Character: %d\n", (uint8_t)c);
 		write(fd, &c, 1);
-		//if (loops == 8)
-		//	sleep(1);
 		c = fgetc(fptr1);
 	}
 	printf("Number of bytes sent: %d\n", loops+ 1);

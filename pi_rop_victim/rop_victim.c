@@ -11,10 +11,10 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-//#define DEBUGFILE
-//#define BUFSIZE			(100)
-#define BUFSIZE			(100)
+#include <sys/time.h>
+#define BUFSIZE			(1000)
 #define FIRST_PACKET_SIZE	(4)
+
 
 union payload_size {
 	uint32_t frame_size;
@@ -22,13 +22,6 @@ union payload_size {
 		uint8_t byte[FIRST_PACKET_SIZE];
 	};
 };
-
-void secret()
-{
-	int fd;
-	fd = open("secret_accessed.txt", O_CREAT|O_RDWR);
-	close(fd);
-}
 
 /* Start receiving log data from sensor's log file*/
 int receive_serial(int serial_driver, int local_log)
@@ -66,21 +59,12 @@ int main ()
 {
 	int serial_port, local_log;
 
-#ifdef DEBUGFILE
-	if ((serial_port = open("/dev/stdin", O_RDWR)) < 0)
-	{
-		fprintf (stderr, "Unable to open serial device: %s\n",
-			 strerror (errno)) ;
-		return 1 ;
-	}
-#else
 	if ((serial_port = serialOpen ("/dev/ttyAMA0", 115200)) < 0)
 	{
 		fprintf (stderr, "Unable to open serial device: %s\n",
 			 strerror (errno)) ;
 		return 1 ;
 	}
-#endif
 
 	for (;;) {
 		if (access("/home/pi/pirop/log.txt", F_OK != -1)){

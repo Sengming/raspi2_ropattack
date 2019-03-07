@@ -1,0 +1,1 @@
+mosquitto_pub -h iot.eclipse.org -t cpss/garage_door -m "OPEN"
